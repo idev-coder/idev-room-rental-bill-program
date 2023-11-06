@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif, 'Native';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+#title-header {
+  font-family: 'Native';
+  font-size: 30px;
+}
+
+@font-face {
+  font-family: 'Native';
+  src: url('./Native-Normal.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+input {
+  border: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  padding: 0px;
+  margin: 0;
+  font-family: "Kanit";
+  font-weight: 400;
+  font-size: 0.8125rem;
+  height: 13px;
+
+}
+
+
+input:focus {
+  background-color: transparent;
+  outline: 3px solid transparent;
+}
