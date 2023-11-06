@@ -5,6 +5,7 @@ const handler = require('serve-handler');
 const http = require('http');
 const os = require("node:os");
 const { readdir, mkdir, copyFile } = require("node:fs/promises");
+const installfont = require('installfont');
 
 
 
@@ -71,11 +72,20 @@ async function installFont() {
     const path = os.homedir().replaceAll("\\", "/");
     let homeDirFonts = await readdir(`${path}/AppData/Local/Microsoft/Windows/Fonts`, { withFileTypes: true });
     let thisDirFonts = await readdir(`${__dirname}/fonts`, { withFileTypes: true });
+    // console.log(homeDirFonts);
     thisDirFonts.map((file) => {
-        if (homeDirFonts.find(({ name }) => name !== file.name)) {
-            copyFile(`${__dirname}/fonts/${file.name}`, `${path}/AppData/Local/Microsoft/Windows/Fonts/${file.name}`, (res) => {
-                console.log(res);
-            });
+        // console.log(file.name);
+        if (homeDirFonts.find(({ name }) => name === file.name)) {
+            console.log(file.name);
+        } else {
+            // copyFile(`${__dirname}/fonts/${file.name}`, `${path}/AppData/Local/Microsoft/Windows/Fonts/${file.name}`, (res) => {
+            //     console.log(res);
+            // });
+            installfont(`${__dirname}/fonts/${file.name}`, function(err) {
+                if(err) console.log(err, err.stack);
+                //handle callback tasks here
+              });
+
         }
     })
 }
