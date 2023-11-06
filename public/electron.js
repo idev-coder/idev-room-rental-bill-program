@@ -67,6 +67,19 @@ function dbPath() {
 
 }
 
+async function installFont() {
+    const path = os.homedir().replaceAll("\\", "/");
+    let homeDirFonts = await readdir(`${path}/AppData/Local/Microsoft/Windows/Fonts`, { withFileTypes: true });
+    let thisDirFonts = await readdir(`${__dirname}/fonts`, { withFileTypes: true });
+    thisDirFonts.map((file) => {
+        if (homeDirFonts.find(({ name }) => name !== file.name)) {
+            copyFile(`${__dirname}/fonts/${file.name}`, `${path}/AppData/Local/Microsoft/Windows/Fonts/${file.name}`, (res) => {
+                console.log(res);
+            });
+        }
+    })
+}
+
 
 if (!isDev) {
     const server = http.createServer((request, response) => {
@@ -87,6 +100,7 @@ if (!isDev) {
 
 const createWindow = () => {
     // Create the browser window.
+    installFont()
     dbPath()
     const mainWindow = new BrowserWindow({
 

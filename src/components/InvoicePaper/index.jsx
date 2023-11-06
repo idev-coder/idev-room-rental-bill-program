@@ -90,6 +90,8 @@ export default function InvoicePaper(props) {
     })
     const invoiceRef = React.useRef(null);
     const invoice2Ref = React.useRef(null);
+    const [electricUnitPrice, setElectricUnitPrice] = React.useState(10)
+    const [waterUnitPrice, setWaterUnitPrice] = React.useState(25)
 
     function total(table) {
         let newTotal = table.map(({ amount }) => {
@@ -584,7 +586,9 @@ export default function InvoicePaper(props) {
                                                                             onChange={(event) => {
                                                                                 const newTable = data.table.map((v, k) => {
                                                                                     if (v.no === val.no) {
-                                                                                        return { ...v, description: { ...v.description, unitAffter: event.target.value } }
+                                                                                        let unit = parseFloat(event.target.value) - parseFloat(v.description.unitBefor)
+                                                                                        let amount = unit * electricUnitPrice
+                                                                                        return { ...v, amount: amount, description: { ...v.description, unitAffter: event.target.value } }
                                                                                     }
 
                                                                                     return v
@@ -608,17 +612,17 @@ export default function InvoicePaper(props) {
                                                             height: '100%'
                                                         }}
                                                             value={amount(val.amount)}
-                                                            onChange={(event) => {
-                                                                const newTable = data.table.map((v, k) => {
-                                                                    if (v.no === val.no) {
-                                                                        return { ...v, amount: event.target.value }
-                                                                    }
+                                                        // onChange={(event) => {
+                                                        //     const newTable = data.table.map((v, k) => {
+                                                        //         if (v.no === val.no) {
+                                                        //             return { ...v, amount: event.target.value }
+                                                        //         }
 
-                                                                    return v
-                                                                })
+                                                        //         return v
+                                                        //     })
 
-                                                                setData({ ...data, table: newTable })
-                                                            }}
+                                                        //     setData({ ...data, table: newTable })
+                                                        // }}
                                                         ></InputBase></td>
                                                     </React.Fragment>)}
                                                     {key === 2 && (<React.Fragment>
@@ -687,7 +691,9 @@ export default function InvoicePaper(props) {
                                                                             onChange={(event) => {
                                                                                 const newTable = data.table.map((v, k) => {
                                                                                     if (v.no === val.no) {
-                                                                                        return { ...v, description: { ...v.description, unitAffter: event.target.value } }
+                                                                                        let unit = parseFloat(event.target.value) - parseFloat(v.description.unitBefor)
+                                                                                        let amount = unit * waterUnitPrice
+                                                                                        return { ...v, amount: amount, description: { ...v.description, unitAffter: event.target.value } }
                                                                                     }
 
                                                                                     return v
@@ -711,17 +717,17 @@ export default function InvoicePaper(props) {
                                                             height: '100%'
                                                         }}
                                                             value={amount(val.amount)}
-                                                            onChange={(event) => {
-                                                                const newTable = data.table.map((v, k) => {
-                                                                    if (v.no === val.no) {
-                                                                        return { ...v, amount: event.target.value }
-                                                                    }
+                                                        // onChange={(event) => {
+                                                        //     const newTable = data.table.map((v, k) => {
+                                                        //         if (v.no === val.no) {
+                                                        //             return { ...v, amount: event.target.value }
+                                                        //         }
 
-                                                                    return v
-                                                                })
+                                                        //         return v
+                                                        //     })
 
-                                                                setData({ ...data, table: newTable })
-                                                            }}
+                                                        //     setData({ ...data, table: newTable })
+                                                        // }}
                                                         ></InputBase></td>
                                                     </React.Fragment>)}
                                                     {key === 3 && (<React.Fragment>
@@ -1819,6 +1825,124 @@ export default function InvoicePaper(props) {
                     minHeight: '5.5in',
                 }}></div>
             </Paper>
+            {(props.mode === "created" || props.mode === "updated") && (<React.Fragment>
+                <div style={{
+                    position: 'fixed',
+                    background: '#fff',
+                    top: '300px',
+                    right: '70px',
+
+                }}>
+                    <div style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                    }}>ค่าไฟฟ้า</div>
+                    <table style={{
+                        border: '1px solid'
+                    }}>
+                        <thead>
+                            <tr>
+                                <th style={{
+                                    border: '1px solid'
+                                }}>หน่วย</th>
+                                <th style={{
+                                    border: '1px solid'
+                                }} >ราคาหน่วย</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style={{
+                                    border: '1px solid',
+                                    textAlign: 'center',
+                                }}> 1</td>
+                                <td style={{
+                                    border: '1px solid'
+                                }}>
+                                    <InputBase style={{
+                                        textAlign: 'center',
+                                        height: '100%'
+                                    }}
+                                        value={electricUnitPrice}
+                                        onChange={(event) => {
+                                            setElectricUnitPrice(event.target.value)
+                                            const newTable = data.table.map((v) => {
+                                                if (v.no === "2") {
+                                                    let unit = parseFloat(v.description.unitAffter) - parseFloat(v.description.unitBefor)
+                                                    let amount = unit * parseFloat(event.target.value)
+                                                    return { ...v, amount: amount }
+                                                }
+
+                                                return v
+                                            })
+                                            setData({ ...data, table: newTable })
+                                        }}
+                                    ></InputBase>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style={{
+                    position: 'fixed',
+                    background: '#fff',
+                    top: '400px',
+                    right: '70px',
+
+                }}>
+                    <div style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                    }}>ค่าน้ำประปา</div>
+                    <table style={{
+                        border: '1px solid'
+                    }}>
+                        <thead>
+                            <tr>
+                                <th style={{
+                                    border: '1px solid'
+                                }}>หน่วย</th>
+                                <th style={{
+                                    border: '1px solid'
+                                }}>ราคาหน่วย</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style={{
+                                    border: '1px solid',
+                                    textAlign: 'center',
+                                }}> 1</td>
+                                <td style={{
+                                    border: '1px solid'
+                                }}>
+                                    <InputBase style={{
+                                        textAlign: 'center',
+                                        height: '100%'
+                                    }}
+                                        value={waterUnitPrice}
+                                        onChange={(event) => {
+                                            setWaterUnitPrice(event.target.value)
+                                            const newTable = data.table.map((v) => {
+                                                if (v.no === "3") {
+                                                    let unit = parseFloat(v.description.unitAffter) - parseFloat(v.description.unitBefor)
+                                                    let amount = unit * parseFloat(event.target.value)
+                                                    return { ...v, amount: amount }
+                                                }
+
+                                                return v
+                                            })
+                                            setData({ ...data, table: newTable })
+                                        }}
+                                    ></InputBase>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </React.Fragment>)}
+
             {props.mode === "view" && (
                 <MenuExportDoc invoice2Ref={invoice2Ref} invoiceRef={invoiceRef} name={props.mode} no={props.room}></MenuExportDoc>
             )}
