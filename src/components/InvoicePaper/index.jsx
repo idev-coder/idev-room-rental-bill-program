@@ -126,7 +126,14 @@ export default function InvoicePaper(props) {
     React.useEffect(() => {
         console.log(props);
         if (props.mode === "created") {
-            window.api.invoice.findAll({ options: { order: [['createdAt', 'DESC']] } }).then((invoices) => {
+            window.api.invoice.findAll({
+                options: {
+                    where: {
+                        room: props.room.name
+                    },
+                    order: [['createdAt', 'DESC']]
+                }
+            }).then((invoices) => {
                 console.log(invoices);
                 if (invoices.length > 0) {
                     const newTable = data.table.map((list) => {
