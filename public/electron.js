@@ -81,7 +81,7 @@ async function installFont() {
             // copyFile(`${__dirname}/fonts/${file.name}`, `${path}/AppData/Local/Microsoft/Windows/Fonts/${file.name}`, (res) => {
             //     console.log(res);
             // });
-            installfont(`${__dirname}/fonts/${file.name}`, function(err) {
+            installfont(`${__dirname}/build/fonts/${file.name}`, function(err) {
                 if(err) console.log(err, err.stack);
                 //handle callback tasks here
               });
