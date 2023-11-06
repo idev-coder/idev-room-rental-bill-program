@@ -71,7 +71,7 @@ function dbPath() {
 async function installFont() {
     const path = os.homedir().replaceAll("\\", "/");
     let homeDirFonts = await readdir(`${path}/AppData/Local/Microsoft/Windows/Fonts`, { withFileTypes: true });
-    let thisDirFonts = await readdir(`${__dirname}/fonts`, { withFileTypes: true });
+    let thisDirFonts = await readdir(`${__dirname}/build/fonts`, { withFileTypes: true });
     // console.log(homeDirFonts);
     thisDirFonts.map((file) => {
         // console.log(file.name);
