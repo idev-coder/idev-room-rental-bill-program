@@ -13,14 +13,39 @@ import {
 } from '@idev/ui/date-pickers';
 import 'dayjs/locale/th';
 
+window.api.unit.findAll({}).then(unit => {
+  console.log(unit);
+  if(unit.length === 0) {
+    window.api.unit.create({
+      body: {
+        id:"1",
+        eUnit:"10",
+        wUnit:"25"
+      }
+    })
+  }
+}).catch((err) => {
+  if (err) {
+    console.log(err);
+    window.api.unit.create({
+      body: {
+        id:"1",
+        eUnit:"10",
+        wUnit:"25"
+      }
+    })
+  }
+})
+
 window.api.room.findAll({}).then(room => {
   console.log(room);
 }).catch((err) => {
   if (err) {
     console.log(err);
+
     window.api.room.create({
       body: {
-        id:"1",
+        id: "1",
         name: "test"
       }
     }).then(room => {
@@ -45,7 +70,8 @@ window.api.room.findAll({}).then(room => {
               before: "3230",
               affter: "3254",
             },
-            amount: "240.00"
+            amount: "240.00",
+            unit:"10"
           },
           {
             id: 3,
@@ -55,7 +81,8 @@ window.api.room.findAll({}).then(room => {
               before: "1957",
               affter: "1959",
             },
-            amount: "50.00"
+            amount: "50.00",
+            unit:"25"
           },
           {
             id: 4,

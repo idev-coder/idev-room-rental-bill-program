@@ -4,7 +4,7 @@ class InvoiceResponseDto {
     table;
     room;
     total;
-
+    
     constructor(payload) {
         this.id = payload.id && payload.id;
         this.date = payload.date && payload.date;

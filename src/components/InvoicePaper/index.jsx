@@ -46,7 +46,8 @@ export default function InvoicePaper(props) {
                     unitBefor: "",
                     unitAffter: "",
                 },
-                amount: ""
+                amount: "",
+                unit: "10"
             },
             {
                 no: "3",
@@ -55,7 +56,8 @@ export default function InvoicePaper(props) {
                     unitBefor: "",
                     unitAffter: "",
                 },
-                amount: ""
+                amount: "",
+                unit: "25"
             },
             {
                 no: "4",
@@ -86,7 +88,9 @@ export default function InvoicePaper(props) {
             }
         ],
         room: props.room.name,
-        total: ""
+        total: "",
+        eUnit: "10",
+        wUnit: "25"
     })
     const invoiceRef = React.useRef(null);
     const invoice2Ref = React.useRef(null);
@@ -140,18 +144,60 @@ export default function InvoicePaper(props) {
                 if (invoices.length > 0) {
                     const newTable = data.table.map((list) => {
                         if (list.no === "2") {
+
                             return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
                         }
 
                         if (list.no === "3") {
+                            setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
                             return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
                         }
 
                         return list
                     })
-                    setData({ ...data, table: newTable, total: total(data.table) })
+                    window.api.unit.findByPk({
+                        id: "1"
+                    }).then(unit => {
+                        const t = newTable.filter((list) => {
+
+                            if (list.no === "2") {
+                                if (!list.unit) {
+                                    list.unit = unit.eUnit
+                                    setElectricUnitPrice(unit.eUnit)
+                                    return list
+                                } else {
+                                    setElectricUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                    return list
+                                }
+
+                            }
+
+                            if (list.no === "3") {
+                                if (!list.unit) {
+                                    list.unit = unit.wUnit
+                                    setWaterUnitPrice(unit.wUnit)
+                                    return list
+                                } else {
+                                    setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                    return list
+                                }
+                            }
+
+                            return list
+                        })
+                        setData({ ...data, table: t, total: total(data.table) })
+                    })
+
+
                 }
             })
+
+            // window.api.unit.findByPk({
+            //     id: "1"
+            // }).then(unit => {
+            //     setElectricUnitPrice(unit.eUnit)
+            //     setWaterUnitPrice(unit.wUnit)
+            // })
         }
 
         if (props.mode === "updated" || props.mode === "view") {
@@ -159,8 +205,38 @@ export default function InvoicePaper(props) {
                 console.log(invoice);
 
                 if (invoice) {
+                    window.api.unit.findByPk({
+                        id: "1"
+                    }).then(unit => {
+                        const table = invoice.table.filter((list) => {
+                            if (list.no === "2") {
+                                if (!list.unit) {
+                                    list.unit = unit.eUnit
+                                    setElectricUnitPrice(unit.eUnit)
+                                    return list
+                                } else {
+                                    setElectricUnitPrice(list.unit)
+                                    return list
+                                }
 
-                    setData({ ...invoice })
+                            }
+
+                            if (list.no === "3") {
+                                if (!list.unit) {
+                                    list.unit = unit.wUnit
+                                    setWaterUnitPrice(unit.wUnit)
+                                    return list
+                                } else {
+                                    setWaterUnitPrice(list.unit)
+                                    return list
+                                }
+                            }
+
+                            return list
+                        })
+                        console.log(table);
+                        setData({ ...invoice, table: table })
+                    })
                 }
             })
         }
@@ -1035,14 +1111,14 @@ export default function InvoicePaper(props) {
                         minHeight: '5.5in',
                     }}></div>
                     <div style={{
-                        maxWidth: '6in',
-                        minWidth: '6in',
+                        maxWidth: '7in',
+                        minWidth: '7in',
                         maxHeight: '5.5in',
                         minHeight: '5.5in',
                     }}>
                         <div style={{
-                            maxWidth: '6in',
-                            minWidth: '6in',
+                            maxWidth: '7in',
+                            minWidth: '7in',
                             maxHeight: '1.4in',
                             minHeight: '1.4in',
                             display: 'flex'
@@ -1106,8 +1182,8 @@ export default function InvoicePaper(props) {
                             <div style={{
                                 maxWidth: '2in',
                                 minWidth: '2in',
-                                maxHeight: '1.4in',
-                                minHeight: '1.4in',
+                                maxHeight: '1in',
+                                minHeight: '1in',
                             }}>
                                 <div style={{
                                     maxWidth: '2in',
@@ -1180,14 +1256,14 @@ export default function InvoicePaper(props) {
                             </div>
                         </div>
                         <div style={{
-                            maxWidth: '6in',
-                            minWidth: '6in',
+                            maxWidth: '7in',
+                            minWidth: '7in',
                             maxHeight: '4.1in',
                             minHeight: '4.1in',
                         }}>
                             <div style={{
-                                maxWidth: '6in',
-                                minWidth: '6in',
+                                maxWidth: '7in',
+                                minWidth: '7in',
                                 maxHeight: '0.4in',
                                 minHeight: '0.4in',
                                 display: 'flex'
@@ -1210,7 +1286,8 @@ export default function InvoicePaper(props) {
                                     }}>
                                         <InputBase style={{
                                             textAlign: 'center',
-                                            height: '100%'
+                                            height: '100%',
+                                            fontSize: '1.2rem'
                                         }}
                                             value={data.room}
                                             onChange={(event) => {
@@ -1220,8 +1297,8 @@ export default function InvoicePaper(props) {
                                     </div>
                                 </div>
                                 <div style={{
-                                    maxWidth: '2.5in',
-                                    minWidth: '2.5in',
+                                    maxWidth: '3.5in',
+                                    minWidth: '3.5in',
                                     maxHeight: '0.4in',
                                     minHeight: '0.4in',
                                     display: 'flex',
@@ -1238,7 +1315,8 @@ export default function InvoicePaper(props) {
                                     }}>
                                         <InputBase style={{
                                             textAlign: 'center',
-                                            height: '100%'
+                                            height: '100%',
+                                            fontSize: '1.2rem'
                                         }}
                                             value={data.date}
                                             onChange={(event) => {
@@ -1249,14 +1327,14 @@ export default function InvoicePaper(props) {
                                 </div>
                             </div>
                             <div style={{
-                                maxWidth: '6in',
-                                minWidth: '6in',
+                                maxWidth: '7in',
+                                minWidth: '7in',
                                 maxHeight: '3.7in',
                                 minHeight: '3.7in',
                             }}>
                                 <table style={{
-                                    maxWidth: '6in',
-                                    minWidth: '6in',
+                                    maxWidth: '7in',
+                                    minWidth: '7in',
                                     border: '1px solid transparent',
                                     maxHeight: '2.7in',
                                     minHeight: '2.7in',
@@ -1267,7 +1345,8 @@ export default function InvoicePaper(props) {
                                         <table style={{
                                             border: '1px solid transparent',
                                             borderCollapse: 'collapse',
-                                            color: 'transparent'
+                                            color: 'transparent',
+                                            height: '1in',
                                         }} >
                                             <tr style={{
                                                 background: 'transparent'
@@ -1278,7 +1357,7 @@ export default function InvoicePaper(props) {
                                                     border: '1px solid transparent'
                                                 }}>{"ลำดับที่"}</th>
                                                 <th style={{
-                                                    width: '3.87in',
+                                                    width: '4.87in',
                                                     height: '0.4in',
                                                     border: '1px solid transparent'
                                                 }}>{"รายการ"}</th>
@@ -1297,7 +1376,7 @@ export default function InvoicePaper(props) {
                                             color: 'transparent'
                                         }} >
                                             {data.table.map((val, key) => (
-                                                <tr key={key}>
+                                                <tr key={key} style={{ height: '0.6in' }}>
                                                     {key === 0 && (<React.Fragment>
                                                         <td style={{
                                                             maxWidth: '0.7in',
@@ -1309,8 +1388,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1335,7 +1414,8 @@ export default function InvoicePaper(props) {
                                                         }}>
                                                             <InputBase style={{
                                                                 textAlign: 'center',
-                                                                height: '100%'
+                                                                height: '100%',
+                                                                fontSize: '1.2rem'
                                                             }}
                                                                 value={amount(val.amount)}
                                                                 onChange={(event) => {
@@ -1363,8 +1443,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1388,7 +1468,8 @@ export default function InvoicePaper(props) {
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
-                                                                            height: '100%'
+                                                                            height: '100%',
+                                                                            fontSize: '1.2rem'
                                                                         }}
                                                                             value={val.description.unitBefor}
                                                                             onChange={(event) => {
@@ -1407,12 +1488,13 @@ export default function InvoicePaper(props) {
                                                                     </div>
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
-                                                                        width: '0.7in',
+                                                                        width: '1.7in',
                                                                         borderBottom: '1px solid'
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
-                                                                            height: '100%'
+                                                                            height: '100%',
+                                                                            fontSize: '1.2rem'
                                                                         }}
                                                                             value={val.description.unitAffter}
                                                                             onChange={(event) => {
@@ -1439,7 +1521,8 @@ export default function InvoicePaper(props) {
                                                             border: '1px solid transparent'
                                                         }}><InputBase style={{
                                                             textAlign: 'center',
-                                                            height: '100%'
+                                                            height: '100%',
+                                                            fontSize: '1.2rem'
                                                         }}
                                                             value={amount(val.amount)}
                                                             onChange={(event) => {
@@ -1466,8 +1549,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1491,7 +1574,8 @@ export default function InvoicePaper(props) {
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
-                                                                            height: '100%'
+                                                                            height: '100%',
+                                                                            fontSize: '1.2rem'
                                                                         }}
                                                                             value={val.description.unitBefor}
                                                                             onChange={(event) => {
@@ -1510,12 +1594,13 @@ export default function InvoicePaper(props) {
                                                                     </div>
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
-                                                                        width: '0.7in',
+                                                                        width: '1.7in',
                                                                         borderBottom: '1px solid'
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
-                                                                            height: '100%'
+                                                                            height: '100%',
+                                                                            fontSize: '1.2rem'
                                                                         }}
                                                                             value={val.description.unitAffter}
                                                                             onChange={(event) => {
@@ -1542,7 +1627,8 @@ export default function InvoicePaper(props) {
                                                             border: '1px solid transparent'
                                                         }}><InputBase style={{
                                                             textAlign: 'center',
-                                                            height: '100%'
+                                                            height: '100%',
+                                                            fontSize: '1.2rem'
                                                         }}
                                                             value={amount(val.amount)}
                                                             onChange={(event) => {
@@ -1569,8 +1655,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1592,7 +1678,8 @@ export default function InvoicePaper(props) {
                                                         }}>
                                                             <InputBase style={{
                                                                 textAlign: 'center',
-                                                                height: '100%'
+                                                                height: '100%',
+                                                                fontSize: '1.2rem'
                                                             }}
                                                                 value={amount(val.amount)}
                                                                 onChange={(event) => {
@@ -1620,8 +1707,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1643,7 +1730,8 @@ export default function InvoicePaper(props) {
                                                         }}>
                                                             <InputBase style={{
                                                                 textAlign: 'center',
-                                                                height: '100%'
+                                                                height: '100%',
+                                                                fontSize: '1.2rem'
                                                             }}
                                                                 value={amount(val.amount)}
                                                                 onChange={(event) => {
@@ -1671,8 +1759,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '3.9in',
-                                                            minWidth: '3.87in',
+                                                            maxWidth: '4.9in',
+                                                            minWidth: '4.87in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1707,10 +1795,10 @@ export default function InvoicePaper(props) {
                                             borderCollapse: 'collapse',
                                             color: 'transparent'
                                         }} >
-                                            <tr>
+                                            <tr style={{ height: '0.6in' }}>
                                                 <td style={{
-                                                    maxWidth: '3.6in',
-                                                    minWidth: '3.57in',
+                                                    maxWidth: '4.6in',
+                                                    minWidth: '4.57in',
                                                     height: '0.3in',
                                                     border: '1px solid transparent'
                                                 }}>{""}</td>
@@ -1731,7 +1819,8 @@ export default function InvoicePaper(props) {
                                                 }}>
                                                     <InputBase style={{
                                                         textAlign: 'center',
-                                                        height: '100%'
+                                                        height: '100%',
+                                                        fontSize: '1.2rem'
                                                     }}
                                                         value={total(data.table)}
                                                         onChange={(event) => {
@@ -1744,8 +1833,8 @@ export default function InvoicePaper(props) {
                                     </tfoot>
                                 </table>
                                 <div style={{
-                                    maxWidth: '6in',
-                                    minWidth: '6in',
+                                    maxWidth: '7in',
+                                    minWidth: '7in',
                                     maxHeight: '0.8in',
                                     minHeight: '0.8in',
                                     display: 'flex',
@@ -1812,8 +1901,8 @@ export default function InvoicePaper(props) {
                         </div>
                     </div>
                     <div style={{
-                        maxWidth: '1in',
-                        minWidth: '1in',
+                        maxWidth: '0in',
+                        minWidth: '0in',
                         maxHeight: '5.5in',
                         minHeight: '5.5in',
                     }}></div>
@@ -1870,7 +1959,7 @@ export default function InvoicePaper(props) {
                                                 if (v.no === "2") {
                                                     let unit = parseFloat(v.description.unitAffter) - parseFloat(v.description.unitBefor)
                                                     let amount = unit * parseFloat(event.target.value)
-                                                    return { ...v, amount: amount }
+                                                    return { ...v, amount: amount, unit: event.target.value }
                                                 }
 
                                                 return v
@@ -1928,7 +2017,7 @@ export default function InvoicePaper(props) {
                                                 if (v.no === "3") {
                                                     let unit = parseFloat(v.description.unitAffter) - parseFloat(v.description.unitBefor)
                                                     let amount = unit * parseFloat(event.target.value)
-                                                    return { ...v, amount: amount }
+                                                    return { ...v, amount: amount, unit: event.target.value }
                                                 }
 
                                                 return v
@@ -1971,7 +2060,8 @@ export default function InvoicePaper(props) {
                                             unitBefor: "",
                                             unitAffter: "",
                                         },
-                                        amount: ""
+                                        amount: "",
+                                        unit: electricUnitPrice
                                     },
                                     {
                                         no: "3",
@@ -1980,7 +2070,8 @@ export default function InvoicePaper(props) {
                                             unitBefor: "",
                                             unitAffter: "",
                                         },
-                                        amount: ""
+                                        amount: "",
+                                        unit: waterUnitPrice
                                     },
                                     {
                                         no: "4",
@@ -2013,8 +2104,17 @@ export default function InvoicePaper(props) {
                                 room: props.room,
                                 total: ""
                             })
-                            props.onClose()
-                            window.location.reload()
+                            window.api.unit.update({
+                                body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                    where: {
+                                        id: "1"
+                                    }
+                                }
+                            }).then(() => {
+
+                                props.onClose()
+                                window.location.reload()
+                            })
                         }
                     })
 
@@ -2051,7 +2151,8 @@ export default function InvoicePaper(props) {
                                             unitBefor: "",
                                             unitAffter: "",
                                         },
-                                        amount: ""
+                                        amount: "",
+                                        unit: electricUnitPrice
                                     },
                                     {
                                         no: "3",
@@ -2060,7 +2161,8 @@ export default function InvoicePaper(props) {
                                             unitBefor: "",
                                             unitAffter: "",
                                         },
-                                        amount: ""
+                                        amount: "",
+                                        unit: waterUnitPrice
                                     },
                                     {
                                         no: "4",
@@ -2093,10 +2195,23 @@ export default function InvoicePaper(props) {
                                 room: props.room,
                                 total: ""
                             })
-                            props.onClose()
-                            window.location.reload()
+
+                            window.api.unit.update({
+                                body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                    where: {
+                                        id: "1"
+                                    }
+                                }
+                            }).then(() => {
+
+                                props.onClose()
+                                window.location.reload()
+                            })
+
+
                         }
                     })
+
 
                 }}></ButtonSave>
             )}

@@ -2,6 +2,7 @@ const { ipcMain } = require("electron");
 
 const invoices = require('../controllers/invoices')
 const rooms = require('../controllers/rooms')
+const units = require('../controllers/units')
 
 exports.setup = () => {
 
@@ -19,5 +20,10 @@ exports.setup = () => {
     ipcMain.handle("update:rooms", (event, { body, options }) => rooms.update(body, options))
     ipcMain.handle("destroy:rooms", (event, { options }) => rooms.destroy(options))
 
-    
+    ipcMain.handle("findAll:units", (event, { options }) => units.findAll(options))
+    ipcMain.handle("findByPk:units", (event, { id }) => units.findByPk(id))
+    ipcMain.handle("findOne:units", (event, { options }) => units.findOne(options))
+    ipcMain.handle("create:units", (event, { body }) => units.create(body))
+    ipcMain.handle("update:units", (event, { body, options }) => units.update(body, options))
+    ipcMain.handle("destroy:units", (event, { options }) => units.destroy(options))
 };

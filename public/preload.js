@@ -26,5 +26,12 @@ contextBridge.exposeInMainWorld("api", {
         update: async ({ body, options }) => await ipcRenderer.invoke("update:rooms", { body, options }),
         destroy: async ({ options }) => await ipcRenderer.invoke("destroy:rooms", { options }),
     },
-
+    unit: {
+        findAll: async ({ options }) => await ipcRenderer.invoke("findAll:units", { options }),
+        findByPk: async ({ id }) => await ipcRenderer.invoke("findByPk:units", { id }),
+        findOne: async ({ options }) => await ipcRenderer.invoke("findOne:units", { options }),
+        create: async ({ body }) => await ipcRenderer.invoke("create:units", { body }),
+        update: async ({ body, options }) => await ipcRenderer.invoke("update:units", { body, options }),
+        destroy: async ({ options }) => await ipcRenderer.invoke("destroy:units", { options }),
+    },
 })

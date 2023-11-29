@@ -33,7 +33,7 @@ exports.update = async (payload, options) => {
 
     await Room.update(data, options)
 
-    return Room.findByPk(id)
+    return Room.findByPk(data.id)
 };
 
 exports.destroy = async (options) => {
