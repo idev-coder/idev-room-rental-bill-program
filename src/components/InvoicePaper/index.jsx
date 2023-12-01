@@ -1111,24 +1111,24 @@ export default function InvoicePaper(props) {
                         minHeight: '5.5in',
                     }}></div>
                     <div style={{
-                        maxWidth: '7in',
-                        minWidth: '7in',
+                        maxWidth: '6.5in',
+                        minWidth: '6.5in',
                         maxHeight: '5.5in',
                         minHeight: '5.5in',
                     }}>
                         <div style={{
-                            maxWidth: '7in',
-                            minWidth: '7in',
-                            maxHeight: '1.4in',
-                            minHeight: '1.4in',
+                            maxWidth: '6.5in',
+                            minWidth: '6.5in',
+                            maxHeight: '1.1in',
+                            minHeight: '1.1in',
                             display: 'flex'
                         }}>
 
                             <div style={{
                                 maxWidth: '0.8in',
                                 minWidth: '0.8in',
-                                maxHeight: '1.4in',
-                                minHeight: '1.4in',
+                                maxHeight: '1.1in',
+                                minHeight: '1.1in',
                             }}>
                                 <div style={{
                                     maxWidth: '0.8in',
@@ -1256,14 +1256,14 @@ export default function InvoicePaper(props) {
                             </div>
                         </div>
                         <div style={{
-                            maxWidth: '7in',
-                            minWidth: '7in',
+                            maxWidth: '6.5in',
+                            minWidth: '6.5in',
                             maxHeight: '4.1in',
                             minHeight: '4.1in',
                         }}>
                             <div style={{
-                                maxWidth: '7in',
-                                minWidth: '7in',
+                                maxWidth: '6.5in',
+                                minWidth: '6.5in',
                                 maxHeight: '0.4in',
                                 minHeight: '0.4in',
                                 display: 'flex'
@@ -1297,8 +1297,8 @@ export default function InvoicePaper(props) {
                                     </div>
                                 </div>
                                 <div style={{
-                                    maxWidth: '3.5in',
-                                    minWidth: '3.5in',
+                                    maxWidth: '3in',
+                                    minWidth: '3in',
                                     maxHeight: '0.4in',
                                     minHeight: '0.4in',
                                     display: 'flex',
@@ -1327,14 +1327,14 @@ export default function InvoicePaper(props) {
                                 </div>
                             </div>
                             <div style={{
-                                maxWidth: '7in',
-                                minWidth: '7in',
+                                maxWidth: '6.5in',
+                                minWidth: '6.5in',
                                 maxHeight: '3.7in',
                                 minHeight: '3.7in',
                             }}>
                                 <table style={{
-                                    maxWidth: '7in',
-                                    minWidth: '7in',
+                                    maxWidth: '6.5in',
+                                    minWidth: '6.5in',
                                     border: '1px solid transparent',
                                     maxHeight: '2.7in',
                                     minHeight: '2.7in',
@@ -1346,7 +1346,7 @@ export default function InvoicePaper(props) {
                                             border: '1px solid transparent',
                                             borderCollapse: 'collapse',
                                             color: 'transparent',
-                                            height: '1in',
+                                            height: '0.7in',
                                         }} >
                                             <tr style={{
                                                 background: 'transparent'
@@ -1376,7 +1376,7 @@ export default function InvoicePaper(props) {
                                             color: 'transparent'
                                         }} >
                                             {data.table.map((val, key) => (
-                                                <tr key={key} style={{ height: '0.6in' }}>
+                                                <tr key={key} style={{ height: '0.4in' }}>
                                                     {key === 0 && (<React.Fragment>
                                                         <td style={{
                                                             maxWidth: '0.7in',
@@ -1388,8 +1388,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1443,8 +1443,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1488,7 +1488,7 @@ export default function InvoicePaper(props) {
                                                                     </div>
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
-                                                                        width: '1.7in',
+                                                                        width: '0.7in',
                                                                         borderBottom: '1px solid'
                                                                     }}>
                                                                         <InputBase style={{
@@ -1549,8 +1549,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1594,7 +1594,7 @@ export default function InvoicePaper(props) {
                                                                     </div>
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
-                                                                        width: '1.7in',
+                                                                        width: '0.7in',
                                                                         borderBottom: '1px solid'
                                                                     }}>
                                                                         <InputBase style={{
@@ -1655,8 +1655,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1707,8 +1707,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1759,8 +1759,8 @@ export default function InvoicePaper(props) {
                                                             fontWeight: 'bold',
                                                         }}>{val.no}</td>
                                                         <td style={{
-                                                            maxWidth: '4.9in',
-                                                            minWidth: '4.87in',
+                                                            maxWidth: '4.4in',
+                                                            minWidth: '4.37in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent'
                                                         }}>
@@ -1795,10 +1795,10 @@ export default function InvoicePaper(props) {
                                             borderCollapse: 'collapse',
                                             color: 'transparent'
                                         }} >
-                                            <tr style={{ height: '0.6in' }}>
+                                            <tr style={{ height: '0.4in' }}>
                                                 <td style={{
-                                                    maxWidth: '4.6in',
-                                                    minWidth: '4.57in',
+                                                    maxWidth: '4.1in',
+                                                    minWidth: '4.07in',
                                                     height: '0.3in',
                                                     border: '1px solid transparent'
                                                 }}>{""}</td>
@@ -1833,8 +1833,8 @@ export default function InvoicePaper(props) {
                                     </tfoot>
                                 </table>
                                 <div style={{
-                                    maxWidth: '7in',
-                                    minWidth: '7in',
+                                    maxWidth: '6.5in',
+                                    minWidth: '6.5in',
                                     maxHeight: '0.8in',
                                     minHeight: '0.8in',
                                     display: 'flex',

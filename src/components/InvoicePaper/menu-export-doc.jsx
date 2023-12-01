@@ -115,10 +115,10 @@ export default function MenuExportDoc(props) {
         w.document.write(element.outerHTML)
         w.document.write('</body></html>');
 
-        setTimeout(() => {
-            w.print();
-            w.close();
-        }, 1000)
+        // setTimeout(() => {
+        //     w.print();
+        //     w.close();
+        // }, 1000)
         element.style.display = "none"
         handleClose()
     }
