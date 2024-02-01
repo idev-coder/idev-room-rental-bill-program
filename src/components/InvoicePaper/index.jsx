@@ -1119,16 +1119,16 @@ export default function InvoicePaper(props) {
                         <div style={{
                             maxWidth: '6.5in',
                             minWidth: '6.5in',
-                            maxHeight: '1.1in',
-                            minHeight: '1.1in',
+                            maxHeight: '0.9in',
+                            minHeight: '0.9in',
                             display: 'flex'
                         }}>
 
                             <div style={{
                                 maxWidth: '0.8in',
                                 minWidth: '0.8in',
-                                maxHeight: '1.1in',
-                                minHeight: '1.1in',
+                                maxHeight: '0.9in',
+                                minHeight: '0.9in',
                             }}>
                                 <div style={{
                                     maxWidth: '0.8in',
@@ -1352,7 +1352,7 @@ export default function InvoicePaper(props) {
                                                 background: 'transparent'
                                             }}>
                                                 <th style={{
-                                                    width: '0.69in',
+                                                    width: '1in',
                                                     height: '0.4in',
                                                     border: '1px solid transparent'
                                                 }}>{"ลำดับที่"}</th>
@@ -1379,8 +1379,8 @@ export default function InvoicePaper(props) {
                                                 <tr key={key} style={{ height: '0.4in' }}>
                                                     {key === 0 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1434,8 +1434,8 @@ export default function InvoicePaper(props) {
                                                     </React.Fragment>)}
                                                     {key === 1 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1489,7 +1489,8 @@ export default function InvoicePaper(props) {
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
                                                                         width: '0.7in',
-                                                                        borderBottom: '1px solid'
+                                                                        borderBottom: '1px solid', 
+                                                                        paddingLeft: '20px'
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
@@ -1540,8 +1541,8 @@ export default function InvoicePaper(props) {
                                                     </React.Fragment>)}
                                                     {key === 2 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1595,7 +1596,8 @@ export default function InvoicePaper(props) {
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
                                                                         width: '0.7in',
-                                                                        borderBottom: '1px solid'
+                                                                        borderBottom: '1px solid', 
+                                                                        paddingLeft: '20px'
                                                                     }}>
                                                                         <InputBase style={{
                                                                             textAlign: 'center',
@@ -1646,8 +1648,8 @@ export default function InvoicePaper(props) {
                                                     </React.Fragment>)}
                                                     {key === 3 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1698,8 +1700,8 @@ export default function InvoicePaper(props) {
                                                     </React.Fragment>)}
                                                     {key === 4 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1750,8 +1752,8 @@ export default function InvoicePaper(props) {
                                                     </React.Fragment>)}
                                                     {key === 5 && (<React.Fragment>
                                                         <td style={{
-                                                            maxWidth: '0.7in',
-                                                            minWidth: '0.69in',
+                                                            maxWidth: '1.2in',
+                                                            minWidth: '1.2in',
                                                             height: '0.3in',
                                                             border: '1px solid transparent',
                                                             textAlign: 'center',
@@ -1797,8 +1799,8 @@ export default function InvoicePaper(props) {
                                         }} >
                                             <tr style={{ height: '0.4in' }}>
                                                 <td style={{
-                                                    maxWidth: '4.1in',
-                                                    minWidth: '4.07in',
+                                                    maxWidth: '4.5in',
+                                                    minWidth: '4.5in',
                                                     height: '0.3in',
                                                     border: '1px solid transparent'
                                                 }}>{""}</td>
