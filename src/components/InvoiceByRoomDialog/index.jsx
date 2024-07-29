@@ -14,6 +14,7 @@ import {
     GridActionsCellItem,
 } from '@idev/ui/data-grid'
 import InvoiceTable from '../InvoiceTable';
+import isElectron from '../../lib/isElectron';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -48,7 +49,7 @@ export default function InvoiceByRoomDialog(props) {
                 onClose={handleClose}
                 TransitionComponent={Transition}
                 style={{
-                    marginTop: 30
+                    marginTop: isElectron() ? 30 : 0
                 }}
             >
                 <DialogTitle id="responsive-dialog-title">
