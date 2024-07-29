@@ -6,7 +6,7 @@ const http = require('http');
 const os = require("node:os");
 const { readdir, mkdir, copyFile } = require("node:fs/promises");
 const installfont = require('installfont');
-
+var api = require('./api/app');
 
 
 const path = require("path");
@@ -37,7 +37,7 @@ function dbPath() {
                         if (!file.isDirectory()) {
                             if (file.name !== "database.db") {
                                 copyFile(`${__dirname}/api/config/database.db`, `${pathDotIDev}/database.db`, (res) => {
-                                    console.log(res);
+                                 
                                 });
                             }
                         }
@@ -56,7 +56,7 @@ function dbPath() {
                         if (!file.isDirectory()) {
                             if (file.name !== "database.db") {
                                 copyFile(`${__dirname}/api/config/database.db`, `${pathDotIDev}/database.db`, (res) => {
-                                    console.log(res);
+                                 
                                 });
                             }
                         }
@@ -72,19 +72,16 @@ async function installFont() {
     const path = os.homedir().replaceAll("\\", "/");
     let homeDirFonts = await readdir(`${path}/AppData/Local/Microsoft/Windows/Fonts`, { withFileTypes: true });
     let thisDirFonts = await readdir(`${__dirname}/build/fonts`, { withFileTypes: true });
-    // console.log(homeDirFonts);
+  
     thisDirFonts.map((file) => {
-        // console.log(file.name);
         if (homeDirFonts.find(({ name }) => name === file.name)) {
-            console.log(file.name);
+           console.log(file.name);
         } else {
-            // copyFile(`${__dirname}/fonts/${file.name}`, `${path}/AppData/Local/Microsoft/Windows/Fonts/${file.name}`, (res) => {
-            //     console.log(res);
-            // });
-            installfont(`${__dirname}/build/fonts/${file.name}`, function(err) {
-                if(err) console.log(err, err.stack);
-                //handle callback tasks here
-              });
+           
+            installfont(`${__dirname}/build/fonts/${file.name}`, function (err) {
+                if (err)console.log(err, err.stack);
+              
+            });
 
         }
     })
@@ -92,6 +89,7 @@ async function installFont() {
 
 
 if (!isDev) {
+    const apiServe = http.createServer(api)
     const server = http.createServer((request, response) => {
         // You pass two more arguments for config and middleware
         // More details here: https://github.com/vercel/serve-handler#options
@@ -101,8 +99,16 @@ if (!isDev) {
         });
     });
 
+    apiServe.listen(9780, () => {
+       console.log('Running at http://localhost:9780');
+    });
     server.listen(3000, () => {
-        console.log('Running at http://localhost:3000');
+       console.log('Running at http://localhost:3000');
+    });
+}else {
+    const apiServe = http.createServer(api)
+    apiServe.listen(9780, () => {
+       console.log('Running at http://localhost:9780');
     });
 }
 

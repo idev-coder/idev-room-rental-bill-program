@@ -18,7 +18,7 @@ exports.findByPk = async (id) => {
 
 exports.findOne = async (options) => {
     const doc = await service.findOne(options);
-    console.log(doc);
+    //console.log(doc);
     return new UnitResponseDto(doc)
 }
 

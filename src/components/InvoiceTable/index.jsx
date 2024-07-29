@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux'
 import { randomId } from '@mui/x-data-grid-generator';
 import { selectInnerHeight } from '../../redux/screen-size';
 import InvoiceDialog from '../InvoiceDialog';
+import isElectron from '../../lib/isElectron';
+import axios from '../../lib/http';
 
 function EditToolbar(props) {
     const { setRows, setRowModesModel, room } = props;
@@ -72,13 +74,23 @@ export default function InvoiceTable(props) {
 
     const handleDeleteClick = (id) => () => {
         setRows(rows.filter((row) => row.id !== id));
-        window.api.invoice.destroy({
-            options: {
-                where: {
-                    id: id
+        if (isElectron()) {
+            window.api.invoice.destroy({
+                options: {
+                    where: {
+                        id: id
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            axios.post("/invoices/destroy", {
+                options: {
+                    where: {
+                        id: id
+                    }
+                }
+            })
+        }
     };
 
     const handleCancelClick = (id) => () => {
@@ -96,29 +108,46 @@ export default function InvoiceTable(props) {
     const processRowUpdate = (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log(newRow);
-        window.api.invoice.findByPk({ id: newRow.id }).then((invoice) => {
-            console.log(invoice);
-            if (invoice) {
-                window.api.invoice.update({
-                    body: { ...updatedRow }, options: {
-                        where: {
-                            id: updatedRow.id
+  
+        if (isElectron()) {
+            window.api.invoice.findByPk({ id: newRow.id }).then((invoice) => {
+           
+                if (invoice) {
+                    window.api.invoice.update({
+                        body: { ...updatedRow }, options: {
+                            where: {
+                                id: updatedRow.id
+                            }
                         }
-                    }
-                }).then((invoiceUpdate) => {
-                    if (invoiceUpdate) {
-                        console.log(invoiceUpdate);
-                    }
-                })
-            } else {
-                window.api.invoice.create({ body: { ...updatedRow } }).then((invoiceCreate) => {
-                    if (invoiceCreate) {
-                        console.log(invoiceCreate);
-                    }
-                })
-            }
-        })
+                    }).then((invoiceUpdate) => {
+                       
+                    })
+                } else {
+                    window.api.invoice.create({ body: { ...updatedRow } }).then((invoiceCreate) => {
+                      
+                    })
+                }
+            })
+        } else {
+            axios.post("/invoices/findByPk", { id: newRow.id }).then(({data:invoice}) => {
+               
+                if (invoice) {
+                    axios.post("/invoices/update", {
+                        body: { ...updatedRow }, options: {
+                            where: {
+                                id: updatedRow.id
+                            }
+                        }
+                    }).then(({data:invoiceUpdate}) => {
+                       
+                    })
+                } else {
+                    axios.post("/invoices/create", { body: { ...updatedRow } }).then(({data:invoiceCreate}) => {
+                        
+                    })
+                }
+            })
+        }
 
         return updatedRow;
     };
@@ -190,16 +219,29 @@ export default function InvoiceTable(props) {
     ];
 
     React.useEffect(() => {
-        window.api.invoice.findAll({
-            options: {
-                where: {
-                    room: props.row.name
+        if (isElectron()) {
+            window.api.invoice.findAll({
+                options: {
+                    where: {
+                        room: props.row.name
+                    }
                 }
-            }
-        }).then((invoice) => {
-            console.log(invoice);
-            setRows([...invoice])
-        })
+            }).then((invoice) => {
+             
+                setRows([...invoice])
+            })
+        } else {
+            axios.post("/invoices/findAll", {
+                options: {
+                    where: {
+                        room: props.row.name
+                    }
+                }
+            }).then(({data:invoice}) => {
+              
+                setRows([...invoice])
+            })
+        }
     }, [])
 
     return (

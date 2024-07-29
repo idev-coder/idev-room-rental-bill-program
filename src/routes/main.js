@@ -21,7 +21,7 @@ export function MainRouter() {
     const innerHeight = useSelector(selectInnerHeight);
 
     React.useEffect(() => {
-        console.log(innerHeight);
+     
     }, [innerHeight]);
 
     return (

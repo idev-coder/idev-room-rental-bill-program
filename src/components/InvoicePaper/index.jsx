@@ -7,6 +7,8 @@ import LOGO from './icon.png'
 import MenuExportDoc from './menu-export-doc';
 import ButtonSave from './button-save';
 import { randomId } from '@mui/x-data-grid-generator';
+import isElectron from '../../lib/isElectron';
+import axios from '../../lib/http';
 
 const InputBase = styled('input')`
 border: 0px;
@@ -130,115 +132,205 @@ export default function InvoicePaper(props) {
     }
 
     React.useEffect(() => {
-        console.log(props);
         if (props.mode === "created") {
-            window.api.invoice.findAll({
-                options: {
-                    where: {
-                        room: props.room.name
-                    },
-                    order: [['createdAt', 'DESC']]
-                }
-            }).then((invoices) => {
-                console.log(invoices);
-                if (invoices.length > 0) {
-                    const newTable = data.table.map((list) => {
-                        if (list.no === "2") {
-
-                            return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
-                        }
-
-                        if (list.no === "3") {
-                            setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
-                            return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
-                        }
-
-                        return list
-                    })
-                    window.api.unit.findByPk({
-                        id: "1"
-                    }).then(unit => {
-                        const t = newTable.filter((list) => {
-
+            if (isElectron()) {
+                window.api.invoice.findAll({
+                    options: {
+                        where: {
+                            room: props.room.name
+                        },
+                        order: [['createdAt', 'DESC']]
+                    }
+                }).then((invoices) => {
+                    if (invoices.length > 0) {
+                        const newTable = data.table.map((list) => {
                             if (list.no === "2") {
-                                if (!list.unit) {
-                                    list.unit = unit.eUnit
-                                    setElectricUnitPrice(unit.eUnit)
-                                    return list
-                                } else {
-                                    setElectricUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
-                                    return list
-                                }
 
+                                return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
                             }
 
                             if (list.no === "3") {
-                                if (!list.unit) {
-                                    list.unit = unit.wUnit
-                                    setWaterUnitPrice(unit.wUnit)
-                                    return list
-                                } else {
-                                    setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
-                                    return list
-                                }
+                                setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
                             }
 
                             return list
                         })
-                        setData({ ...data, table: t, total: total(data.table) })
-                    })
+                        window.api.unit.findByPk({
+                            id: "1"
+                        }).then(unit => {
+                            const t = newTable.filter((list) => {
+
+                                if (list.no === "2") {
+                                    if (!list.unit) {
+                                        list.unit = unit.eUnit
+                                        setElectricUnitPrice(unit.eUnit)
+                                        return list
+                                    } else {
+                                        setElectricUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                        return list
+                                    }
+
+                                }
+
+                                if (list.no === "3") {
+                                    if (!list.unit) {
+                                        list.unit = unit.wUnit
+                                        setWaterUnitPrice(unit.wUnit)
+                                        return list
+                                    } else {
+                                        setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                        return list
+                                    }
+                                }
+
+                                return list
+                            })
+                            setData({ ...data, table: t, total: total(data.table) })
+                        })
 
 
-                }
-            })
+                    }
+                })
+            } else {
+                axios.post("/invoices/findAll", {
+                    options: {
+                        where: {
+                            room: props.room.name
+                        },
+                        order: [['createdAt', 'DESC']]
+                    }
+                }).then(({data:invoices}) => {
+                    if (invoices.length > 0) {
+                        const newTable = data.table.map((list) => {
+                            if (list.no === "2") {
 
-            // window.api.unit.findByPk({
-            //     id: "1"
-            // }).then(unit => {
-            //     setElectricUnitPrice(unit.eUnit)
-            //     setWaterUnitPrice(unit.wUnit)
-            // })
+                                return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
+                            }
+
+                            if (list.no === "3") {
+                                setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                return { ...list, description: { ...list.description, unitBefor: invoices[0].table.find(({ no }) => no === list.no).description.unitAffter } }
+                            }
+
+                            return list
+                        })
+                        axios.post("/units/findByPk", {
+                            id: "1"
+                        }).then(({data:unit}) => {
+                            const t = newTable.filter((list) => {
+
+                                if (list.no === "2") {
+                                    if (!list.unit) {
+                                        list.unit = unit.eUnit
+                                        setElectricUnitPrice(unit.eUnit)
+                                        return list
+                                    } else {
+                                        setElectricUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                        return list
+                                    }
+
+                                }
+
+                                if (list.no === "3") {
+                                    if (!list.unit) {
+                                        list.unit = unit.wUnit
+                                        setWaterUnitPrice(unit.wUnit)
+                                        return list
+                                    } else {
+                                        setWaterUnitPrice(invoices[0].table.find(({ no }) => no === list.no).unit)
+                                        return list
+                                    }
+                                }
+
+                                return list
+                            })
+                            setData({ ...data, table: t, total: total(data.table) })
+                        })
+
+                    }
+                })
+            }
+
+
         }
 
         if (props.mode === "updated" || props.mode === "view") {
-            window.api.invoice.findByPk({ id: props.row.id }).then((invoice) => {
-                console.log(invoice);
+            if (isElectron()) {
+                window.api.invoice.findByPk({ id: props.row.id }).then((invoice) => {
+             
 
-                if (invoice) {
-                    window.api.unit.findByPk({
-                        id: "1"
-                    }).then(unit => {
-                        const table = invoice.table.filter((list) => {
-                            if (list.no === "2") {
-                                if (!list.unit) {
-                                    list.unit = unit.eUnit
-                                    setElectricUnitPrice(unit.eUnit)
-                                    return list
-                                } else {
-                                    setElectricUnitPrice(list.unit)
-                                    return list
+                    if (invoice) {
+                        window.api.unit.findByPk({
+                            id: "1"
+                        }).then(unit => {
+                            const table = invoice.table.filter((list) => {
+                                if (list.no === "2") {
+                                    if (!list.unit) {
+                                        list.unit = unit.eUnit
+                                        setElectricUnitPrice(unit.eUnit)
+                                        return list
+                                    } else {
+                                        setElectricUnitPrice(list.unit)
+                                        return list
+                                    }
+
                                 }
 
-                            }
-
-                            if (list.no === "3") {
-                                if (!list.unit) {
-                                    list.unit = unit.wUnit
-                                    setWaterUnitPrice(unit.wUnit)
-                                    return list
-                                } else {
-                                    setWaterUnitPrice(list.unit)
-                                    return list
+                                if (list.no === "3") {
+                                    if (!list.unit) {
+                                        list.unit = unit.wUnit
+                                        setWaterUnitPrice(unit.wUnit)
+                                        return list
+                                    } else {
+                                        setWaterUnitPrice(list.unit)
+                                        return list
+                                    }
                                 }
-                            }
 
-                            return list
+                                return list
+                            })
+                        
+                            setData({ ...invoice, table: table })
                         })
-                        console.log(table);
-                        setData({ ...invoice, table: table })
-                    })
-                }
-            })
+                    }
+                })
+            } else {
+                axios.post("/invoices/findByPk", { id: props.row.id }).then(({data:invoice}) => {
+                    if (invoice) {
+                        axios.post("/units/findByPk", { id: "1" }).then(({data:unit}) => {
+                            const table = invoice.table.filter((list) => {
+                                if (list.no === "2") {
+                                    if (!list.unit) {
+                                        list.unit = unit.eUnit
+                                        setElectricUnitPrice(unit.eUnit)
+                                        return list
+                                    } else {
+                                        setElectricUnitPrice(list.unit)
+                                        return list
+                                    }
+
+                                }
+
+                                if (list.no === "3") {
+                                    if (!list.unit) {
+                                        list.unit = unit.wUnit
+                                        setWaterUnitPrice(unit.wUnit)
+                                        return list
+                                    } else {
+                                        setWaterUnitPrice(list.unit)
+                                        return list
+                                    }
+                                }
+
+                                return list
+                            })
+                         
+                            setData({ ...invoice, table: table })
+                        })
+                    }
+                })
+            }
         }
     }, [])
 
@@ -1489,7 +1581,7 @@ export default function InvoicePaper(props) {
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
                                                                         width: '0.7in',
-                                                                        borderBottom: '1px solid', 
+                                                                        borderBottom: '1px solid',
                                                                         paddingLeft: '20px'
                                                                     }}>
                                                                         <InputBase style={{
@@ -1596,7 +1688,7 @@ export default function InvoicePaper(props) {
                                                                     <div>{"(จดครั้งหลัง)"}</div>
                                                                     <div style={{
                                                                         width: '0.7in',
-                                                                        borderBottom: '1px solid', 
+                                                                        borderBottom: '1px solid',
                                                                         paddingLeft: '20px'
                                                                     }}>
                                                                         <InputBase style={{
@@ -2039,180 +2131,353 @@ export default function InvoicePaper(props) {
             )}
             {props.mode === "created" && (
                 <ButtonSave onClick={() => {
-                    console.log(data);
-                    window.api.invoice.create({ body: { ...data, total: total(data.table) } }).then((invoice) => {
-                        if (invoice) {
-                            setData({
-                                id: randomId(),
-                                date: "",
-                                table: [
-                                    {
-                                        no: "1",
-                                        description: {
-                                            name: "ค่าเช่าห้อง",
-                                            unitBefor: "",
-                                            unitAffter: "",
+                
+                    if (isElectron()) {
+                        window.api.invoice.create({ body: { ...data, total: total(data.table) } }).then((invoice) => {
+                            if (invoice) {
+                                setData({
+                                    id: randomId(),
+                                    date: "",
+                                    table: [
+                                        {
+                                            no: "1",
+                                            description: {
+                                                name: "ค่าเช่าห้อง",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
                                         },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "2",
-                                        description: {
-                                            name: "ค่าไฟฟ้า",
-                                            unitBefor: "",
-                                            unitAffter: "",
+                                        {
+                                            no: "2",
+                                            description: {
+                                                name: "ค่าไฟฟ้า",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: electricUnitPrice
                                         },
-                                        amount: "",
-                                        unit: electricUnitPrice
-                                    },
-                                    {
-                                        no: "3",
-                                        description: {
-                                            name: "ค่าน้ำประปา",
-                                            unitBefor: "",
-                                            unitAffter: "",
+                                        {
+                                            no: "3",
+                                            description: {
+                                                name: "ค่าน้ำประปา",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: waterUnitPrice
                                         },
-                                        amount: "",
-                                        unit: waterUnitPrice
-                                    },
-                                    {
-                                        no: "4",
-                                        description: {
-                                            name: "ค่าโทรศัพท์",
-                                            unitBefor: "",
-                                            unitAffter: "",
+                                        {
+                                            no: "4",
+                                            description: {
+                                                name: "ค่าโทรศัพท์",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
                                         },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "5",
-                                        description: {
-                                            name: "อื่นๆ",
-                                            unitBefor: "",
-                                            unitAffter: "",
+                                        {
+                                            no: "5",
+                                            description: {
+                                                name: "อื่นๆ",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
                                         },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "",
-                                        description: {
-                                            name: "",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: ""
+                                        {
+                                            no: "",
+                                            description: {
+                                                name: "",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        }
+                                    ],
+                                    room: props.room,
+                                    total: ""
+                                })
+                                window.api.unit.update({
+                                    body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                        where: {
+                                            id: "1"
+                                        }
                                     }
-                                ],
-                                room: props.room,
-                                total: ""
-                            })
-                            window.api.unit.update({
-                                body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
-                                    where: {
-                                        id: "1"
-                                    }
-                                }
-                            }).then(() => {
+                                }).then(() => {
 
-                                props.onClose()
-                                window.location.reload()
-                            })
-                        }
-                    })
+                                    props.onClose()
+                                    window.location.reload()
+                                })
+                            }
+                        })
+                    } else {
+                        axios.post("/invoices/create", { body: { ...data, total: total(data.table) } }).then(({data:invoice}) => {
+                            if (invoice) {
+                                setData({
+                                    id: randomId(),
+                                    date: "",
+                                    table: [
+                                        {
+                                            no: "1",
+                                            description: {
+                                                name: "ค่าเช่าห้อง",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "2",
+                                            description: {
+                                                name: "ค่าไฟฟ้า",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: electricUnitPrice
+                                        },
+                                        {
+                                            no: "3",
+                                            description: {
+                                                name: "ค่าน้ำประปา",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: waterUnitPrice
+                                        },
+                                        {
+                                            no: "4",
+                                            description: {
+                                                name: "ค่าโทรศัพท์",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "5",
+                                            description: {
+                                                name: "อื่นๆ",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "",
+                                            description: {
+                                                name: "",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        }
+                                    ],
+                                    room: props.room,
+                                    total: ""
+                                })
+                                axios.post("/units/update", {
+                                    body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                        where: {
+                                            id: "1"
+                                        }
+                                    }
+                                }).then(() => {
+
+                                    props.onClose()
+                                    window.location.reload()
+                                })
+                            }
+                        })
+                    }
 
                 }}></ButtonSave>
             )}
             {props.mode === "updated" && (
                 <ButtonSave onClick={() => {
-                    console.log(data);
-                    window.api.invoice.update({
-                        body: { ...data, total: total(data.table) }, options: {
-                            where: {
-                                id: props.row.id
-                            }
-                        }
-                    }).then((invoice) => {
-                        if (invoice) {
-                            setData({
-                                id: randomId(),
-                                date: "",
-                                table: [
-                                    {
-                                        no: "1",
-                                        description: {
-                                            name: "ค่าเช่าห้อง",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "2",
-                                        description: {
-                                            name: "ค่าไฟฟ้า",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: "",
-                                        unit: electricUnitPrice
-                                    },
-                                    {
-                                        no: "3",
-                                        description: {
-                                            name: "ค่าน้ำประปา",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: "",
-                                        unit: waterUnitPrice
-                                    },
-                                    {
-                                        no: "4",
-                                        description: {
-                                            name: "ค่าโทรศัพท์",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "5",
-                                        description: {
-                                            name: "อื่นๆ",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: ""
-                                    },
-                                    {
-                                        no: "",
-                                        description: {
-                                            name: "",
-                                            unitBefor: "",
-                                            unitAffter: "",
-                                        },
-                                        amount: ""
-                                    }
-                                ],
-                                room: props.room,
-                                total: ""
-                            })
-
-                            window.api.unit.update({
-                                body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
-                                    where: {
-                                        id: "1"
-                                    }
+            
+                    if (isElectron()) {
+                        window.api.invoice.update({
+                            body: { ...data, total: total(data.table) }, options: {
+                                where: {
+                                    id: props.row.id
                                 }
-                            }).then(() => {
+                            }
+                        }).then((invoice) => {
+                            if (invoice) {
+                                setData({
+                                    id: randomId(),
+                                    date: "",
+                                    table: [
+                                        {
+                                            no: "1",
+                                            description: {
+                                                name: "ค่าเช่าห้อง",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "2",
+                                            description: {
+                                                name: "ค่าไฟฟ้า",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: electricUnitPrice
+                                        },
+                                        {
+                                            no: "3",
+                                            description: {
+                                                name: "ค่าน้ำประปา",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: waterUnitPrice
+                                        },
+                                        {
+                                            no: "4",
+                                            description: {
+                                                name: "ค่าโทรศัพท์",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "5",
+                                            description: {
+                                                name: "อื่นๆ",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "",
+                                            description: {
+                                                name: "",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        }
+                                    ],
+                                    room: props.room,
+                                    total: ""
+                                })
 
-                                props.onClose()
-                                window.location.reload()
-                            })
+                                window.api.unit.update({
+                                    body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                        where: {
+                                            id: "1"
+                                        }
+                                    }
+                                }).then(() => {
+
+                                    props.onClose()
+                                    window.location.reload()
+                                })
 
 
-                        }
-                    })
+                            }
+                        })
+                    } else {
+                        axios.post("/invoices/update", {
+                            body: { ...data, total: total(data.table) }, options: {
+                                where: {
+                                    id: props.row.id
+                                }
+                            }
+                        }).then(({data:invoice}) => {
+                            if (invoice) {
+                                setData({
+                                    id: randomId(),
+                                    date: "",
+                                    table: [
+                                        {
+                                            no: "1",
+                                            description: {
+                                                name: "ค่าเช่าห้อง",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "2",
+                                            description: {
+                                                name: "ค่าไฟฟ้า",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: electricUnitPrice
+                                        },
+                                        {
+                                            no: "3",
+                                            description: {
+                                                name: "ค่าน้ำประปา",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: "",
+                                            unit: waterUnitPrice
+                                        },
+                                        {
+                                            no: "4",
+                                            description: {
+                                                name: "ค่าโทรศัพท์",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "5",
+                                            description: {
+                                                name: "อื่นๆ",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        },
+                                        {
+                                            no: "",
+                                            description: {
+                                                name: "",
+                                                unitBefor: "",
+                                                unitAffter: "",
+                                            },
+                                            amount: ""
+                                        }
+                                    ],
+                                    room: props.room,
+                                    total: ""
+                                })
+
+                                axios.post("/units/update", {
+                                    body: { eUnit: electricUnitPrice, wUnit: waterUnitPrice }, options: {
+                                        where: {
+                                            id: "1"
+                                        }
+                                    }
+                                }).then(() => {
+
+                                    props.onClose()
+                                    window.location.reload()
+                                })
+
+
+                            }
+                        })
+                    }
 
 
                 }}></ButtonSave>

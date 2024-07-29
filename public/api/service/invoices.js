@@ -5,7 +5,7 @@ const Invoice = db['invoices']
 
 exports.findAll = (options) => {
     if (options) {
-        console.log(options);
+      
         return Invoice.findAll(options)
     } else {
         return Invoice.findAll()

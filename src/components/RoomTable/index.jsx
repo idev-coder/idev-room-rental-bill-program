@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux'
 import { randomId } from '@mui/x-data-grid-generator';
 import { selectInnerHeight } from '../../redux/screen-size';
 import InvoiceByRoomDialog from '../InvoiceByRoomDialog';
+import isElectron from '../../lib/isElectron';
+import axios from '../../lib/http';
 
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
@@ -73,13 +75,23 @@ export default function RoomTable() {
 
     const handleDeleteClick = (id) => () => {
         setRows(rows.filter((row) => row.id !== id));
-        window.api.room.destroy({
-            options: {
-                where: {
-                    id: id
+        if (isElectron()) {
+            window.api.room.destroy({
+                options: {
+                    where: {
+                        id: id
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            axios.post("/rooms/destroy", {
+                options: {
+                    where: {
+                        id: id
+                    }
+                }
+            })
+        }
     };
 
     const handleCancelClick = (id) => () => {
@@ -97,29 +109,46 @@ export default function RoomTable() {
     const processRowUpdate = (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log(newRow);
-        window.api.room.findByPk({ id: newRow.id }).then((room) => {
-            console.log(room);
-            if (room) {
-                window.api.room.update({
-                    body: { ...updatedRow }, options: {
-                        where: {
-                            id: updatedRow.id
+      
+        if (isElectron()) {
+            window.api.room.findByPk({ id: newRow.id }).then((room) => {
+              
+                if (room) {
+                    window.api.room.update({
+                        body: { ...updatedRow }, options: {
+                            where: {
+                                id: updatedRow.id
+                            }
                         }
-                    }
-                }).then((roomUpdate) => {
-                    if (roomUpdate) {
-                        console.log(roomUpdate);
-                    }
-                })
-            } else {
-                window.api.room.create({ body: { ...updatedRow } }).then((roomCreate) => {
-                    if (roomCreate) {
-                        console.log(roomCreate);
-                    }
-                })
-            }
-        })
+                    }).then((roomUpdate) => {
+                       
+                    })
+                } else {
+                    window.api.room.create({ body: { ...updatedRow } }).then((roomCreate) => {
+                        
+                    })
+                }
+            })
+        } else {
+            axios.post("/rooms/findByPk", { id: newRow.id }).then(({data:room}) => {
+               
+                if (room) {
+                    axios.post("/rooms/update", {
+                        body: { ...updatedRow }, options: {
+                            where: {
+                                id: updatedRow.id
+                            }
+                        }
+                    }).then(({data:roomUpdate}) => {
+                       
+                    })
+                } else {
+                    axios.post("/rooms/create", { body: { ...updatedRow } }).then(({data:roomCreate}) => {
+                        
+                    })
+                }
+            })
+        }
 
         return updatedRow;
     };
@@ -187,9 +216,16 @@ export default function RoomTable() {
     ];
 
     React.useEffect(() => {
-        window.api.room.findAll({}).then((room) => {
-            setRows([...room])
-        })
+        if (isElectron()) {
+            window.api.room.findAll({}).then((room) => {
+                setRows([...room])
+            })
+        } else {
+            axios.post("/rooms/findAll", {}).then(({data:room}) => {
+              
+                setRows([...room])
+            })
+        }
     }, [])
 
     return (

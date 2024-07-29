@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { arrayOf, node, oneOfType } from "prop-types";
 import WindowControls from "./WindowControls";
 import TabHome from "./TabHome";
-
+import isElectron from "../../lib/isElectron";
 
 export function Frame({
   children,
@@ -13,9 +13,11 @@ export function Frame({
   className,
   browserWindowId,
 }) {
+
+
   return (
     <React.Fragment>
-      <div id="title-bar" className={`title-bar ${className || ""}`}>
+      {isElectron() && ( <div id="title-bar" className={`title-bar ${className || ""}`}>
         <div className="resize-handle resize-handle-top" />
         <div className="resize-handle resize-handle-left" />
         {!!icon && <TabHome icon={icon}></TabHome>}
@@ -25,7 +27,8 @@ export function Frame({
           disableMaximize={disableMaximize}
           browserWindowId={browserWindowId}
         ></WindowControls>
-      </div>
+      </div>)}
+     
       <div
         style={{
           height: "100vh",

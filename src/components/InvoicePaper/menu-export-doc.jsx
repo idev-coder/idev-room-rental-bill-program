@@ -35,7 +35,7 @@ export default function MenuExportDoc(props) {
     };
 
     const saveImage = (element) => {
-        console.log(element);
+     
         screenShot(element)
         handleClose()
     }
@@ -48,7 +48,7 @@ export default function MenuExportDoc(props) {
         })
         var width = doc.internal.pageSize.getWidth();
         var height = doc.internal.pageSize.getHeight();
-        console.log(width);
+ 
         html2canvas(element).then((canvas) => {
 
             const image = canvas.toDataURL(

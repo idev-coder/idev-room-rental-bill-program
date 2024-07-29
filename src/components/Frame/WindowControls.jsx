@@ -21,7 +21,6 @@ export function WindowControls({
         ) => {
             if (targetBrowserWindowId === remoteBrowserWindowId.current) {
                 setIsMaximized(isWindowMaximumized);
-                console.log(isWindowMaximumized, targetBrowserWindowId, size);
                 dispatch(
                     updateScreen({
                         innerHeight: window.innerHeight,
