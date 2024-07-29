@@ -31,7 +31,7 @@
     "react-window": "^1.8.9",
     "sequelize": "^6.33.0",
     "serve-handler": "^6.1.5",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^5.1.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -71,6 +71,7 @@
     "electron": "^27.0.2",
     "electron-builder": "^24.6.4",
     "electron-devtools-installer": "^3.2.0",
+    "electron-rebuild": "^3.2.9",
     "electronmon": "^2.0.2",
     "react-scripts": "^5.0.1",
     "wait-on": "^7.0.1"

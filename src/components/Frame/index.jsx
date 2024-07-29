@@ -3,6 +3,9 @@ import { Outlet } from "react-router-dom";
 import { arrayOf, node, oneOfType } from "prop-types";
 import WindowControls from "./WindowControls";
 import TabHome from "./TabHome";
+import {
+  IconButton
+} from '@idev/ui'
 import isElectron from "../../lib/isElectron";
 
 export function Frame({
@@ -17,7 +20,7 @@ export function Frame({
 
   return (
     <React.Fragment>
-      {isElectron() && ( <div id="title-bar" className={`title-bar ${className || ""}`}>
+      {isElectron() && (<div id="title-bar" className={`title-bar ${className || ""}`}>
         <div className="resize-handle resize-handle-top" />
         <div className="resize-handle resize-handle-left" />
         {!!icon && <TabHome icon={icon}></TabHome>}
@@ -28,7 +31,7 @@ export function Frame({
           browserWindowId={browserWindowId}
         ></WindowControls>
       </div>)}
-     
+
       <div
         style={{
           height: "100vh",
@@ -41,7 +44,11 @@ export function Frame({
         bottom: '4px',
         right: '8px',
         color: '#00000036',
-      }}>idevcoder.com</div>
+      }}>{window.location.origin} <IconButton color="primary" aria-label="copy" onClick={() => {
+        navigator.clipboard.writeText(window.location.origin);
+      }}>
+          <i className="fa-duotone fa-solid fa-copy"></i>
+        </IconButton></div>
     </React.Fragment>
   );
 }
