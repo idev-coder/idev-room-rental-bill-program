@@ -3,7 +3,7 @@ import router, { MainRouter } from "./routes/main";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { updateScreen } from "./redux/screen-size";
-import { ThemeProvider } from '@idev/ui';
+import { ThemeProvider } from '@idev-coder/idev-ui';
 import theme from './theme';
 import 'dayjs/locale/th';
 

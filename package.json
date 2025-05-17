@@ -1,11 +1,11 @@
 {
   "name": "idev-room-rental-bill-program",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "main": "public/electron.js",
   "dependencies": {
-    "@idev/icons": "github:idev-code/idev-icons#lib/v0.1.0",
-    "@idev/ui": "github:idev-code/idev-ui#lib/v0.1.0",
+    "@idev-coder/idev-icons": "^1.0.2",
+    "@idev-coder/idev-ui": "^1.0.2",
     "@mui/x-data-grid-generator": "^6.17.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",

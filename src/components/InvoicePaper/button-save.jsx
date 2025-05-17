@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
     Box,
     Button
-} from '@idev/ui';
+} from '@idev-coder/idev-ui';
 
 export default function ButtonSave(props) {
 

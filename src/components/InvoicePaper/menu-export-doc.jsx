@@ -6,7 +6,7 @@ import {
     SpeedDial,
     SpeedDialIcon,
     SpeedDialAction
-} from '@idev/ui';
+} from '@idev-coder/idev-ui';
 import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
 import '../../assets/fonts/Kanit/Kanit-Regular-normal';

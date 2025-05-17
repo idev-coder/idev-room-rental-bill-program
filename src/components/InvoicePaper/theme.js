@@ -1,4 +1,4 @@
-import { createTheme } from '@idev/ui';
+import { createTheme } from '@idev-coder/idev-ui';
 
 export const theme = createTheme({
     typography: {

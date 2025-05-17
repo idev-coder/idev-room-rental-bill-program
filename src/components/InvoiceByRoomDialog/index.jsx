@@ -9,10 +9,10 @@ import {
     Typography,
     Slide,
     Grid
-} from '@idev/ui'
+} from '@idev-coder/idev-ui'
 import {
     GridActionsCellItem,
-} from '@idev/ui/data-grid'
+} from '@idev-coder/idev-ui/data-grid'
 import InvoiceTable from '../InvoiceTable';
 import isElectron from '../../lib/isElectron';
 

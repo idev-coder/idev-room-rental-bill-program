@@ -4,7 +4,7 @@ import {
     Box,
     Button,
     Grid
-} from '@idev/ui'
+} from '@idev-coder/idev-ui'
 import {
     GridRowModes,
     DataGrid,
@@ -12,7 +12,7 @@ import {
     GridActionsCellItem,
     GridRowEditStopReasons,
     GridToolbarQuickFilter
-} from '@idev/ui/data-grid'
+} from '@idev-coder/idev-ui/data-grid'
 import { useSelector } from 'react-redux'
 
 import { randomId } from '@mui/x-data-grid-generator';

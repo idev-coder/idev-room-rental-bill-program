@@ -5,7 +5,7 @@ import WindowControls from "./WindowControls";
 import TabHome from "./TabHome";
 import {
   IconButton
-} from '@idev/ui'
+} from '@idev-coder/idev-ui'
 import isElectron from "../../lib/isElectron";
 
 export function Frame({

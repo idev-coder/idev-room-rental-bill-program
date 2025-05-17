@@ -10,10 +10,10 @@ import {
     Slide,
     Grid,
     Box
-} from '@idev/ui'
+} from '@idev-coder/idev-ui'
 import {
     GridActionsCellItem,
-} from '@idev/ui/data-grid'
+} from '@idev-coder/idev-ui/data-grid'
 import InvoicePaper from '../InvoicePaper';
 import isElectron from '../../lib/isElectron';
 

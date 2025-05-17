@@ -1,6 +1,6 @@
 import * as React from "react";
 // import { arrayOf, node, shape, string } from "prop-types";
-import { Box } from "@idev/ui";
+import { Box } from "@idev-coder/idev-ui";
 import { Outlet } from "react-router-dom";
 
 export function VerticalTabs() {

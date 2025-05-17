@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, Box } from "@idev/ui";
+import { Typography, Box } from "@idev-coder/idev-ui";
 // import { Outlet } from "react-router-dom";
 import RoomTable from "../components/RoomTable";
 

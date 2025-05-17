@@ -7,10 +7,10 @@ import store from "./redux/store";
 
 import './index.css';
 import "./components/Frame/style.css";
-import '@idev/icons/css/all.css'
+import '@idev-coder/idev-icons/css/all.css'
 import {
   dayjs,
-} from '@idev/ui/date-pickers';
+} from '@idev-coder/idev-ui/date-pickers';
 import 'dayjs/locale/th';
 import isElectron from './lib/isElectron';
 import axios from './lib/http';
