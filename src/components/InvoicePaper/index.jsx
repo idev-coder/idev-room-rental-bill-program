@@ -68,6 +68,7 @@ export default function InvoicePaper(props) {
           name: "ค่าโทรศัพท์",
           unitBefor: "",
           unitAffter: "",
+          text: "",
         },
         amount: "",
       },
@@ -1208,6 +1209,43 @@ export default function InvoicePaper(props) {
                                     }}
                                   >
                                     {val.description.name}
+                                  </div>
+                                     <div
+                                    style={{
+                                      width: "2.9in",
+                                      fontSize: 14,
+                                      borderBottom:
+                                        props.mode === "view"
+                                          ? "hidden"
+                                          : "1px dashed black",
+                                    }}
+                                  >
+                                    <InputBase
+                                      style={{
+                                        textAlign: "start",
+                                        height: "100%",
+                                      }}
+                                      value={val.description.text}
+                                      onChange={(event) => {
+                                        const newTable = data.table.map(
+                                          (v, k) => {
+                                            if (v.id === val.id) {
+                                              return {
+                                                ...v,
+                                                description: {
+                                                  ...v.description,
+                                                  text: event.target.value,
+                                                },
+                                              };
+                                            }
+
+                                            return v;
+                                          }
+                                        );
+
+                                        setData({ ...data, table: newTable });
+                                      }}
+                                    ></InputBase>
                                   </div>
                                 </div>
                               </td>
@@ -2490,6 +2528,20 @@ export default function InvoicePaper(props) {
                                     }}
                                   >
                                     {val.description.name}
+                                  </div>
+                                  <div
+                                    style={{
+                                      width: "2.9in",
+                                      fontSize: 14,
+                                    }}
+                                  >
+                                     <InputBase
+                                      style={{
+                                        textAlign: "center",
+                                        height: "100%",
+                                      }}
+                                      value={val.description.text}
+                                    ></InputBase>
                                   </div>
                                 </div>
                               </td>
