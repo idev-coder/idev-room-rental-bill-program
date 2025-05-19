@@ -1,6 +1,6 @@
 {
   "name": "idev-room-rental-bill-program",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "main": "public/electron.js",
   "dependencies": {
