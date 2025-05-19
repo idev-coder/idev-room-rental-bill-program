@@ -2548,7 +2548,7 @@ export default function InvoicePaper(props) {
                                       style={{
                                         textAlign: "start",
                                         height: "100%",
-                                        fontSize: "1.2rem",
+                                        // fontSize: "1.2rem",
                                       }}
                                       value={val.description.text}
                                     ></InputBase>
@@ -2634,7 +2634,7 @@ export default function InvoicePaper(props) {
                                       style={{
                                         textAlign: "start",
                                         height: "100%",
-                                        fontSize: "1.2rem",
+                                        // fontSize: "1.2rem",
                                       }}
                                       value={val.description.text}
                                     ></InputBase>
@@ -2719,7 +2719,7 @@ export default function InvoicePaper(props) {
                                       style={{
                                         textAlign: "start",
                                         height: "100%",
-                                        fontSize: "1.2rem",
+                                        // fontSize: "1.2rem",
                                       }}
                                       value={val.description.name}
                                     ></InputBase>
