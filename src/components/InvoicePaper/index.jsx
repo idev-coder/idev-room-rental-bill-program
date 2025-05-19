@@ -154,7 +154,11 @@ export default function InvoicePaper(props) {
           })
           .then((invoices) => {
             if (invoices.length > 0) {
-              const newTable = data.table.map((list) => {
+              const newTable = data.table.map((list, key) => {
+                list.id = `t${key + 1}`;
+                list.description.text = list.description.text
+                  ? list.description.text
+                  : "";
                 if (list.no === "2") {
                   return {
                     ...list,
@@ -184,6 +188,7 @@ export default function InvoicePaper(props) {
 
                 return list;
               });
+              console.log("newTable ->", newTable);
               window.api.unit
                 .findByPk({
                   id: "1",
@@ -318,7 +323,11 @@ export default function InvoicePaper(props) {
                 id: "1",
               })
               .then((unit) => {
-                const table = invoice.table.filter((list) => {
+                const table = invoice.table.filter((list, key) => {
+                  list.id = `t${key + 1}`;
+                  list.description.text = list.description.text
+                    ? list.description.text
+                    : "";
                   if (list.no === "2") {
                     if (!list.unit) {
                       list.unit = unit.eUnit;
@@ -1210,7 +1219,7 @@ export default function InvoicePaper(props) {
                                   >
                                     {val.description.name}
                                   </div>
-                                     <div
+                                  <div
                                     style={{
                                       width: "2.9in",
                                       fontSize: 14,
@@ -2535,10 +2544,11 @@ export default function InvoicePaper(props) {
                                       fontSize: 14,
                                     }}
                                   >
-                                     <InputBase
+                                    <InputBase
                                       style={{
-                                        textAlign: "center",
+                                        textAlign: "start",
                                         height: "100%",
+                                        fontSize: "1.2rem",
                                       }}
                                       value={val.description.text}
                                     ></InputBase>
@@ -2620,10 +2630,11 @@ export default function InvoicePaper(props) {
                                       fontSize: 14,
                                     }}
                                   >
-                                     <InputBase
+                                    <InputBase
                                       style={{
-                                        textAlign: "center",
+                                        textAlign: "start",
                                         height: "100%",
+                                        fontSize: "1.2rem",
                                       }}
                                       value={val.description.text}
                                     ></InputBase>
@@ -2706,8 +2717,9 @@ export default function InvoicePaper(props) {
                                   >
                                     <InputBase
                                       style={{
-                                        textAlign: "center",
+                                        textAlign: "start",
                                         height: "100%",
+                                        fontSize: "1.2rem",
                                       }}
                                       value={val.description.name}
                                     ></InputBase>
@@ -2722,12 +2734,13 @@ export default function InvoicePaper(props) {
                                 }}
                               >
                                 <InputBase
-                                      style={{
-                                        textAlign: "center",
-                                        height: "100%",
-                                      }}
-                                      value={val.amount}
-                                    ></InputBase>
+                                  style={{
+                                    textAlign: "center",
+                                    height: "100%",
+                                    fontSize: "1.2rem",
+                                  }}
+                                  value={val.amount}
+                                ></InputBase>
                               </td>
                             </React.Fragment>
                           )}
